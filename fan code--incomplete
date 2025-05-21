@@ -1,0 +1,70 @@
+void manualFanSpeedControl(int speedMode) {
+    int speed;
+    switch (speedMode) {
+        case 1:
+            speed = 100; // Highest speed
+            lcd.setCursor(0, 0);
+            lcd.print("Fan Speed set to: ");
+            lcd.setCursor(0, 1);
+            lcd.print("1- LOWEST    ");
+            break;
+        case 2:
+            lcd.setCursor(0, 0);
+            lcd.print("Fan Speed set to: ");
+            lcd.setCursor(0, 1);
+            lcd.print("2- LOW    ");
+            speed = 150;
+            break;
+        case 3:
+            lcd.setCursor(0, 0);
+            lcd.print("Fan Speed set to: ");
+            lcd.setCursor(0, 1);
+            lcd.print("3- MEDIUM    ");
+            speed = 200;
+            break;
+        case 4:
+            lcd.setCursor(0, 0);
+            lcd.print("Fan Speed set to: ");
+            lcd.setCursor(0, 1);
+            lcd.print("4- HIGHEST    ");
+            speed = 255; // Lowest speed
+            break;
+        default:
+            speed = 0; // Turn off the fan if invalid speed mode
+    }
+    analogWrite(motor, speed); // Set the fan speed
+}
+
+// Check if the temperature reading is within a valid range
+if (temperature >= 0 && temperature <= 100) {
+    if (temperature < 15) {
+        analogWrite(motor, 0); // Turn off the fan
+        lcd.setCursor(0, 1);
+        lcd.print("Fan OFF    ");
+    } else if (temperature >= 15 && temperature < 20) {
+        analogWrite(motor, 100); // Set fan speed to low
+        lcd.setCursor(0, 1);
+        lcd.print("Fan Lowest    ");
+    } else if (temperature >= 20 && temperature < 25) {
+        analogWrite(motor, 140); // Set fan speed to low
+        lcd.setCursor(0, 1);
+        lcd.print("Fan very Low    ");
+    } else if (temperature >= 25 && temperature < 30) {
+        analogWrite(motor, 180); // Set fan speed to low
+        lcd.setCursor(0, 1);
+        lcd.print("Fan Low    ");
+    } else if (temperature >= 30 && temperature < 35) {
+        analogWrite(motor, 200); // Set fan speed to medium
+        lcd.setCursor(0, 1);
+        lcd.print("Fan Medium    ");
+    } else {
+        analogWrite(motor, 255); // Set fan speed to high
+        lcd.setCursor(0, 1);
+        lcd.print("Fan High    ");
+    }
+} else {
+    // Handle out of range temperature readings
+    lcd.print("Out of Range    ");
+    analogWrite(motor, 0); // Turn off the fan
+}
+delay(1000); // Delay for stability
